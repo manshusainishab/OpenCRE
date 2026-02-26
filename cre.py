@@ -8,7 +8,7 @@ from typing import List
 try:
     from dotenv import load_dotenv  # type: ignore
 
-    load_dotenv()  
+    load_dotenv()
 except ImportError:
     pass
 
