@@ -20,7 +20,10 @@ export const MyOpenCRE = () => {
 
   const downloadCreCsv = async () => {
     try {
-      const response = await fetch(`${apiUrl}/cre_csv`, {
+      const baseUrl = apiUrl || window.location.origin;
+      const backendUrl = baseUrl.includes('localhost') ? 'http://127.0.0.1:5000' : baseUrl;
+
+      const response = await fetch(`${backendUrl}/cre_csv`, {
         method: 'GET',
         headers: { Accept: 'text/csv' },
       });
@@ -44,25 +47,6 @@ export const MyOpenCRE = () => {
       console.error('CSV download failed:', err);
       alert('Failed to download CRE CSV');
     }
-  };
-
-  const downloadTemplate = () => {
-    const headers = ['standard_name', 'standard_section', 'cre_id', 'notes'];
-
-    const csvContent = headers.join(',') + '\n';
-
-    const blob = new Blob([csvContent], {
-      type: 'text/csv;charset=utf-8;',
-    });
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-
-    link.href = url;
-    link.setAttribute('download', 'myopencre_mapping_template.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   /* ------------------ FILE SELECTION ------------------ */
@@ -143,9 +127,6 @@ export const MyOpenCRE = () => {
       <div className="myopencre-section">
         <Button primary onClick={downloadCreCsv}>
           Download CRE Catalogue (CSV)
-        </Button>
-        <Button secondary onClick={downloadTemplate} style={{ marginLeft: '1rem' }}>
-          Download Mapping Template (CSV)
         </Button>
       </div>
 
